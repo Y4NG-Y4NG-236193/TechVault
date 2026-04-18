@@ -3,7 +3,7 @@ import { AIService } from '../services/ai.service'
 import 'dotenv/config'
 
 async function embedAllProducts() {
-    const { data: products } = await supabase.from('products').select('*')
+    const { data: products } = await supabase.schema('TechVault').from('Products').select('*')
 
     if (!products) return
 
@@ -13,9 +13,10 @@ async function embedAllProducts() {
 
         // Sve the fingerprint back to Supabase
         await supabase
-            .from('products')
+            .schema('TechVault')
+            .from('Products')
             .update({ embedding })
-            .eq('id', product.id)
+            .eq('product_id', product.product_id)
 
 
     }

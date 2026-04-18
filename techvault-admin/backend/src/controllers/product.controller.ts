@@ -6,6 +6,7 @@ export class ProductController {
     static async getProducts(req: Request, res: Response, next: NextFunction) {
         try {
             const { data: products, error } = await supabase
+                .schema('TechVault')
                 .from('Products')
                 .select('*')
                 .order('created_at', { ascending: false });
@@ -26,6 +27,7 @@ export class ProductController {
             const { id } = req.params;
 
             const { data: product, error } = await supabase
+                .schema('TechVault')
                 .from('Products')
                 .select('*')
                 .eq('product_id', id)
@@ -51,6 +53,7 @@ export class ProductController {
             }
 
             const { data: newProduct, error } = await supabase
+                .schema('TechVault')
                 .from('Products')
                 .insert([
                     {
@@ -83,6 +86,7 @@ export class ProductController {
             const updates = req.body;
 
             const { data: updatedProduct, error } = await supabase
+                .schema('TechVault')
                 .from('Products')
                 .update(updates)
                 .eq('product_id', id)
@@ -105,6 +109,7 @@ export class ProductController {
             const { id } = req.params;
 
             const { error } = await supabase
+                .schema('TechVault')
                 .from('Products')
                 .delete()
                 .eq('product_id', id);

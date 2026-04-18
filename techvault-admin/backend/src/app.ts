@@ -12,6 +12,11 @@ app.use(helmet())
 app.use(cors())
 app.use(express.json())
 
+// Root route
+app.get('/', (req, res) => {
+    res.send('TechVault API is running')
+})
+
 // Health check
 app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', uptime: process.uptime() })
@@ -25,3 +30,4 @@ app.use(productRouter)
 app.use(errorHandler)
 
 export default app
+// Trigger nodemon restart
