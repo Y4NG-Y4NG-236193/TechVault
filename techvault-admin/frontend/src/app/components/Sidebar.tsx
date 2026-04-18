@@ -8,6 +8,7 @@ import {
   ShoppingCart,
   Box,
   BarChart3,
+  User,
   Zap,
   Megaphone,
   Database,
@@ -21,7 +22,8 @@ import {
 const mainNavItems = [
   { name: "Dashboard", href: "/", icon: LayoutDashboard },
   { name: "Orders", href: "/orders", icon: ShoppingCart },
-  { name: "Inventory", href: "/inventory", icon: Box },
+  { name: "Inventory", href: "/pages/Inventory", icon: Box },
+  { name: "Customers", href: "/pages/Customers", icon: User },
   { name: "Analytics", href: "/analytics", icon: BarChart3 },
   { name: "Automation Workflows", href: "/automation", icon: Zap },
   { name: "Marketing", href: "/marketing", icon: Megaphone },

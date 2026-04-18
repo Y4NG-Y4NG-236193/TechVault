@@ -1,10 +1,21 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../../../../utils/supabase'; // Assuming Supabase client is configured, let's verify if they have it
-// I will actually create simple API calls with fetch
 import { Plus, Edit2, Trash2, Search, X } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
+import { handleDelete } from '@/app/components/buttons/Delete-Button';
+import { SaveButton } from '@/app/components/buttons/Save-Button';
+import { useSave } from '@/app/hooks/useSave';
+
+// Subset of Product used in the create/edit form
+type ProductFormData = {
+  name: string;
+  description: string;
+  price: number;
+  brand: string;
+  stock: number;
+  rating: number;
+};
 
 interface Product {
   product_id: string;
@@ -23,22 +34,19 @@ export default function Inventory() {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
-  // Form State
-  const [formData, setFormData] = useState({
+  // Form State — typed explicitly so useSave generic resolves correctly
+  const [formData, setFormData] = useState<ProductFormData>({
     name: '',
     description: '',
     price: 0,
     brand: '',
     stock: 0,
-    rating: 0
+    rating: 0,
   });
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
-
-  useEffect(() => {
-    fetchProducts();
-  }, []);
 
   const getAuthToken = async () => {
     try {
@@ -55,13 +63,8 @@ export default function Inventory() {
     try {
       setLoading(true);
       const token = await getAuthToken();
-      // Temporary workaround during development if authentication is tricky: 
-      // Modify backend to make it optional for dev or assume a good token.
-
       const res = await fetch(`${apiUrl}/api/products`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
+        headers: { 'Authorization': `Bearer ${token}` }
       });
       if (res.ok) {
         const data = await res.json();
@@ -74,6 +77,11 @@ export default function Inventory() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setEditingProduct(null);
   };
 
   const handleOpenModal = (product?: Product) => {
@@ -89,85 +97,25 @@ export default function Inventory() {
       });
     } else {
       setEditingProduct(null);
-      setFormData({
-        name: '',
-        description: '',
-        price: 0,
-        brand: '',
-        stock: 0,
-        rating: 0
-      });
+      setFormData({ name: '', description: '', price: 0, brand: '', stock: 0, rating: 0 });
     }
     setIsModalOpen(true);
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setEditingProduct(null);
-  };
+  // Generic save handler — fully driven by useSave hook
+  const handleSave = useSave<ProductFormData>({
+    endpoint: 'products',
+    editingId: editingProduct?.product_id,
+    formData,
+    onSuccess: fetchProducts,
+    onClose: handleCloseModal,
+  });
 
-  const handleSave = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const token = await getAuthToken();
-    try {
-      if (editingProduct) {
-        const res = await fetch(`${apiUrl}/api/products/${editingProduct.product_id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify(formData)
-        });
-        if (res.ok) {
-          fetchProducts();
-          handleCloseModal();
-        } else {
-          const errData = await res.json().catch(() => ({}));
-          console.error('Update failed:', res.status, errData);
-          alert(`Update failed: ${errData.error || res.statusText}`);
-        }
-      } else {
-        const res = await fetch(`${apiUrl}/api/products`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify(formData)
-        });
-        if (res.ok) {
-          fetchProducts();
-          handleCloseModal();
-        } else {
-          const errData = await res.json().catch(() => ({}));
-          console.error('Create failed:', res.status, errData);
-          alert(`Create failed: ${errData.error || res.statusText}`);
-        }
-      }
-    } catch (error) {
-      console.error('Error saving product:', error);
-    }
-  };
+  useEffect(() => {
+    fetchProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const handleDelete = async (id: string) => {
-    if (confirm('Are you sure you want to delete this product?')) {
-      const token = await getAuthToken();
-      try {
-        const res = await fetch(`${apiUrl}/api/products/${id}`, {
-          method: 'DELETE',
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-        if (res.ok) {
-          fetchProducts();
-        }
-      } catch (error) {
-        console.error('Error deleting product:', error);
-      }
-    }
-  };
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -192,6 +140,8 @@ export default function Inventory() {
             <input
               type="text"
               placeholder="Search products..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm"
             />
           </div>
@@ -218,7 +168,13 @@ export default function Inventory() {
                   <td colSpan={5} className="px-6 py-8 text-center text-gray-400">No products found. Start by adding one.</td>
                 </tr>
               ) : (
-                products.map((product) => (
+                products
+                  .filter(product =>
+                    product.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    product.brand?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    product.description?.toLowerCase().includes(searchTerm.toLowerCase())
+                  )
+                  .map((product) => (
                   <tr key={product.product_id} className="hover:bg-gray-50/50 transition-colors">
                     <td className="px-6 py-4">
                       <div className="font-medium text-gray-900">{product.name}</div>
@@ -236,7 +192,7 @@ export default function Inventory() {
                         <button onClick={() => handleOpenModal(product)} className="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors">
                           <Edit2 className="h-4 w-4" />
                         </button>
-                        <button onClick={() => handleDelete(product.product_id)} className="p-2 text-gray-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors">
+                        <button onClick={() => handleDelete('products', product.product_id, fetchProducts)} className="p-2 text-gray-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors">
                           <Trash2 className="h-4 w-4" />
                         </button>
                       </div>
@@ -283,7 +239,7 @@ export default function Inventory() {
                   <label className="block text-sm font-medium text-gray-700 mb-1">Price</label>
                   <input
                     type="number"
-                    step="0.01"
+                    step="1"
                     value={Number.isNaN(formData.price) ? '' : formData.price}
                     onChange={(e) => setFormData({ ...formData, price: e.target.value ? parseFloat(e.target.value) : 0 })}
                     className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
@@ -318,12 +274,7 @@ export default function Inventory() {
                 >
                   Cancel
                 </button>
-                <button
-                  type="submit"
-                  className="px-5 py-2.5 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl transition-all shadow-md shadow-indigo-200"
-                >
-                  {editingProduct ? 'Save Changes' : 'Create Product'}
-                </button>
+                <SaveButton label={editingProduct ? 'Save Changes' : 'Create Product'} />
               </div>
             </form>
           </div>
