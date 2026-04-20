@@ -14,7 +14,8 @@ type ProductFormData = {
   price: number;
   brand: string;
   stock: number;
-  rating: number;
+  rating: number; // Nullable when adding and updating the database. It should not be manipulated by the admin.
+
 };
 
 interface Product {
@@ -175,30 +176,30 @@ export default function Inventory() {
                     product.description?.toLowerCase().includes(searchTerm.toLowerCase())
                   )
                   .map((product) => (
-                  <tr key={product.product_id} className="hover:bg-gray-50/50 transition-colors">
-                    <td className="px-6 py-4">
-                      <div className="font-medium text-gray-900">{product.name}</div>
-                      <div className="text-gray-500 text-xs truncate max-w-xs">{product.description}</div>
-                    </td>
-                    <td className="px-6 py-4 text-gray-600">{product.brand || '-'}</td>
-                    <td className="px-6 py-4 font-medium text-gray-900">${product.price.toFixed(2)}</td>
-                    <td className="px-6 py-4">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${product.stock > 10 ? 'bg-emerald-50 text-emerald-700' : product.stock > 0 ? 'bg-amber-50 text-amber-700' : 'bg-rose-50 text-rose-700'}`}>
-                        {product.stock} in stock
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        <button onClick={() => handleOpenModal(product)} className="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors">
-                          <Edit2 className="h-4 w-4" />
-                        </button>
-                        <button onClick={() => handleDelete('products', product.product_id, fetchProducts)} className="p-2 text-gray-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors">
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
+                    <tr key={product.product_id} className="hover:bg-gray-50/50 transition-colors">
+                      <td className="px-6 py-4">
+                        <div className="font-medium text-gray-900">{product.name}</div>
+                        <div className="text-gray-500 text-xs truncate max-w-xs">{product.description}</div>
+                      </td>
+                      <td className="px-6 py-4 text-gray-600">{product.brand || '-'}</td>
+                      <td className="px-6 py-4 font-medium text-gray-900">${product.price.toFixed(2)}</td>
+                      <td className="px-6 py-4">
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${product.stock > 10 ? 'bg-emerald-50 text-emerald-700' : product.stock > 0 ? 'bg-amber-50 text-amber-700' : 'bg-rose-50 text-rose-700'}`}>
+                          {product.stock} in stock
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <div className="flex items-center justify-end gap-2">
+                          <button onClick={() => handleOpenModal(product)} className="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors">
+                            <Edit2 className="h-4 w-4" />
+                          </button>
+                          <button onClick={() => handleDelete('products', product.product_id, fetchProducts)} className="p-2 text-gray-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors">
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
               )}
             </tbody>
           </table>
