@@ -13,8 +13,9 @@ type ProductFormData = {
   description: string;
   price: number | string;
   brand: string;
-  stock: number;
-  rating: number;
+  stock: number | string;
+  rating: number; //It should not be manipulated by the admin.
+
 };
 
 interface Product {
@@ -187,9 +188,9 @@ export default function Inventory() {
                         <div className="text-gray-500 text-xs truncate max-w-xs">{product.description}</div>
                       </td>
                       <td className="px-6 py-4 text-gray-600">{product.brand || '-'}</td>
-                      <td className="px-6 py-4 font-medium text-gray-900">${product.price.toFixed(2)}</td>
+                      <td className="px-6 py-4 font-medium text-gray-900">₱{Number(product.price).toFixed(2)}</td>
                       <td className="px-6 py-4">
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${product.stock > 10 ? 'bg-emerald-50 text-emerald-700' : product.stock > 0 ? 'bg-amber-50 text-amber-700' : 'bg-rose-50 text-rose-700'}`}>
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${Number(product.stock) > 10 ? 'bg-emerald-50 text-emerald-700' : Number(product.stock) > 0 ? 'bg-amber-50 text-amber-700' : 'bg-rose-50 text-rose-700'}`}>
                           {product.stock} in stock
                         </span>
                       </td>
