@@ -11,21 +11,20 @@ import { useSave } from '@/app/hooks/useSave';
 type ProductFormData = {
   name: string;
   description: string;
-  price: number;
+  price: number | string;
   brand: string;
   stock: number;
-  rating: number; // Nullable when adding and updating the database. It should not be manipulated by the admin.
-
+  rating: number;
 };
 
 interface Product {
   product_id: string;
   name: string;
   description: string;
-  price: number;
+  price: number | string;
   brand: string;
   category_id?: string;
-  stock: number;
+  stock: number | string;
   rating: number;
   created_at: string;
 }
@@ -41,9 +40,9 @@ export default function Inventory() {
   const [formData, setFormData] = useState<ProductFormData>({
     name: '',
     description: '',
-    price: 0,
+    price: '',
     brand: '',
-    stock: 0,
+    stock: '',
     rating: 0,
   });
 
@@ -93,21 +92,27 @@ export default function Inventory() {
         description: product.description || '',
         price: product.price,
         brand: product.brand || '',
-        stock: product.stock || 0,
-        rating: product.rating || 0
+        stock: product.stock,
+        rating: product.rating
       });
     } else {
       setEditingProduct(null);
-      setFormData({ name: '', description: '', price: 0, brand: '', stock: 0, rating: 0 });
+      setFormData({ name: '', description: '', price: '', brand: '', stock: '', rating: 0 });
     }
     setIsModalOpen(true);
   };
 
   // Generic save handler — fully driven by useSave hook
+  const cleanData = {
+    ...formData,
+    price: typeof formData.price === 'string' ? parseFloat(formData.price) || 0 : formData.price,
+    stock: typeof formData.stock === 'string' ? parseInt(formData.stock, 10) || 0 : formData.stock,
+  };
+
   const handleSave = useSave<ProductFormData>({
     endpoint: 'products',
     editingId: editingProduct?.product_id,
-    formData,
+    formData: cleanData,
     onSuccess: fetchProducts,
     onClose: handleCloseModal,
   });
@@ -240,9 +245,9 @@ export default function Inventory() {
                   <label className="block text-sm font-medium text-gray-700 mb-1">Price</label>
                   <input
                     type="number"
-                    step="1"
-                    value={Number.isNaN(formData.price) ? '' : formData.price}
-                    onChange={(e) => setFormData({ ...formData, price: e.target.value ? parseFloat(e.target.value) : 0 })}
+                    step="0.01"
+                    value={formData.price}
+                    onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                     className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
                     required
                   />
@@ -251,8 +256,8 @@ export default function Inventory() {
                   <label className="block text-sm font-medium text-gray-700 mb-1">Stock</label>
                   <input
                     type="number"
-                    value={Number.isNaN(formData.stock) ? '' : formData.stock}
-                    onChange={(e) => setFormData({ ...formData, stock: e.target.value ? parseInt(e.target.value, 10) : 0 })}
+                    value={formData.stock}
+                    onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
                     className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
                     required
                   />

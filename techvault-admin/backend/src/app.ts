@@ -13,6 +13,15 @@ app.use(helmet())
 app.use(cors())
 app.use(express.json())
 
+// Welcome route
+app.get('/', (req, res) => {
+    res.json({
+        message: 'TechVault API is running',
+        version: '1.0.0',
+        documentation: '/api/health'
+    })
+})
+
 // Health check
 app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', uptime: process.uptime() })
