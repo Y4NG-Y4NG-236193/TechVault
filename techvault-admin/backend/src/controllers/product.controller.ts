@@ -8,7 +8,11 @@ export class ProductController {
             const { data: products, error } = await supabase
                 .schema('TechVault')
                 .from('Products')
-                .select('*')
+                .select(`
+                    *,
+                    images:Product_Images(*),
+                    specs:Product_Specifications(*)
+                `)
                 .order('created_at', { ascending: false });
 
             if (error) {
@@ -29,7 +33,11 @@ export class ProductController {
             const { data: product, error } = await supabase
                 .schema('TechVault')
                 .from('Products')
-                .select('*')
+                .select(`
+                    *,
+                    images:Product_Images(*),
+                    specs:Product_Specifications(*)
+                `)
                 .eq('product_id', id)
                 .single();
 
@@ -46,13 +54,14 @@ export class ProductController {
     // 3. Create a new product
     static async createProduct(req: Request, res: Response, next: NextFunction) {
         try {
-            const { name, description, price, brand, category_id, stock, rating } = req.body;
+            const { name, description, price, brand, category_id, stock, rating, images, specs } = req.body;
 
             if (!name || price === undefined) {
                 return res.status(400).json({ error: 'Name and price are required' });
             }
 
-            const { data: newProduct, error } = await supabase
+            // 1. Insert the main product
+            const { data: newProduct, error: productError } = await supabase
                 .schema('TechVault')
                 .from('Products')
                 .insert([
@@ -69,11 +78,56 @@ export class ProductController {
                 .select()
                 .single();
 
-            if (error) {
-                return res.status(400).json({ error: error.message });
+            if (productError) {
+                return res.status(400).json({ error: productError.message });
             }
 
-            res.status(201).json(newProduct);
+            const product_id = newProduct.product_id;
+
+            // 2. Insert Images if provided
+            if (images && Array.isArray(images) && images.length > 0) {
+                const imageData = images.map((img: any) => ({
+                    product_id,
+                    image_url: img.image_url,
+                    is_main: img.is_main || false
+                }));
+
+                const { error: imageError } = await supabase
+                    .schema('TechVault')
+                    .from('Product_Images')
+                    .insert(imageData);
+
+                if (imageError) {
+                    console.error('Error inserting images:', imageError.message);
+                }
+            }
+
+            // 3. Insert Specifications if provided
+            if (specs && typeof specs === 'object') {
+                const { error: specError } = await supabase
+                    .schema('TechVault')
+                    .from('Product_Specifications')
+                    .insert([
+                        {
+                            product_id,
+                            spec_key: specs // Total JSON object
+                        }
+                    ]);
+
+                if (specError) {
+                    console.error('Error inserting specs:', specError.message);
+                }
+            }
+
+            // Fetch the final product with all relations to return
+            const { data: finalProduct } = await supabase
+                .schema('TechVault')
+                .from('Products')
+                .select('*, images:Product_Images(*), specs:Product_Specifications(*)')
+                .eq('product_id', product_id)
+                .single();
+
+            res.status(201).json(finalProduct || newProduct);
         } catch (error) {
             next(error);
         }
@@ -83,21 +137,73 @@ export class ProductController {
     static async updateProduct(req: Request, res: Response, next: NextFunction) {
         try {
             const { id } = req.params;
-            const updates = req.body;
+            const { images, specs, ...productUpdates } = req.body;
 
-            const { data: updatedProduct, error } = await supabase
+            // 1. Update main product info
+            const { data: updatedProduct, error: productError } = await supabase
                 .schema('TechVault')
                 .from('Products')
-                .update(updates)
+                .update(productUpdates)
                 .eq('product_id', id)
                 .select()
                 .single();
 
-            if (error) {
-                return res.status(400).json({ error: error.message });
+            if (productError) {
+                return res.status(400).json({ error: productError.message });
             }
 
-            res.status(200).json(updatedProduct);
+            // 2. Handle Images (Overwriting for simplicity)
+            if (images && Array.isArray(images)) {
+                // Delete existing images first
+                await supabase
+                    .schema('TechVault')
+                    .from('Product_Images')
+                    .delete()
+                    .eq('product_id', id);
+
+                // Insert new ones
+                const imageData = images.map((img: any) => ({
+                    product_id: id,
+                    image_url: img.image_url,
+                    is_main: img.is_main || false
+                }));
+
+                await supabase
+                    .schema('TechVault')
+                    .from('Product_Images')
+                    .insert(imageData);
+            }
+
+            // 3. Handle Specs (Overwriting for simplicity)
+            if (specs && typeof specs === 'object') {
+                // Delete existing specs first
+                await supabase
+                    .schema('TechVault')
+                    .from('Product_Specifications')
+                    .delete()
+                    .eq('product_id', id);
+
+                // Insert new ones
+                await supabase
+                    .schema('TechVault')
+                    .from('Product_Specifications')
+                    .insert([
+                        {
+                            product_id: id,
+                            spec_key: specs
+                        }
+                    ]);
+            }
+
+            // Fetch final state
+            const { data: finalProduct } = await supabase
+                .schema('TechVault')
+                .from('Products')
+                .select('*, images:Product_Images(*), specs:Product_Specifications(*)')
+                .eq('product_id', id)
+                .single();
+
+            res.status(200).json(finalProduct || updatedProduct);
         } catch (error) {
             next(error);
         }
