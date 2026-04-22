@@ -152,16 +152,29 @@ export class ProductController {
                 return res.status(400).json({ error: productError.message });
             }
 
-            // 2. Handle Images (Overwriting for simplicity)
+            // 2. Handle Images (Diffing and Overwriting)
             if (images && Array.isArray(images)) {
-                // Delete existing images first
+                // Fetch current images from DB to identify what to delete from storage
+                const { data: currentImages } = await supabase
+                    .schema('TechVault')
+                    .from('Product_Images')
+                    .select('image_url')
+                    .eq('product_id', id);
+
+                // Identify URLs that are removed in this update
+                const newUrls = images.map((img: any) => img.image_url);
+                const staleUrls = (currentImages || [])
+                    .filter(img => !newUrls.includes(img.image_url))
+                    .map(img => img.image_url);
+
+                // Delete existing image records from database
                 await supabase
                     .schema('TechVault')
                     .from('Product_Images')
                     .delete()
                     .eq('product_id', id);
 
-                // Insert new ones
+                // Insert new image records
                 const imageData = images.map((img: any) => ({
                     product_id: id,
                     image_url: img.image_url,
@@ -172,6 +185,26 @@ export class ProductController {
                     .schema('TechVault')
                     .from('Product_Images')
                     .insert(imageData);
+
+                // Cleanup Storage for stale images (Best effort)
+                if (staleUrls.length > 0) {
+                    const pathsToDelete = staleUrls
+                        .map(url => {
+                            const parts = url.split('/public/products/');
+                            return parts.length > 1 ? parts[1] : null;
+                        })
+                        .filter((path): path is string => path !== null);
+
+                    if (pathsToDelete.length > 0) {
+                        const { error: storageError } = await supabase.storage
+                            .from('products')
+                            .remove(pathsToDelete);
+                        
+                        if (storageError) {
+                            console.error('Error cleaning up stale storage:', storageError.message);
+                        }
+                    }
+                }
             }
 
             // 3. Handle Specs (Overwriting for simplicity)
@@ -214,6 +247,28 @@ export class ProductController {
         try {
             const { id } = req.params;
 
+            // 1. Fetch Image URLs before deleting them from DB
+            const { data: images } = await supabase
+                .schema('TechVault')
+                .from('Product_Images')
+                .select('image_url')
+                .eq('product_id', id);
+
+            // 2. Delete Related Images from database
+            await supabase
+                .schema('TechVault')
+                .from('Product_Images')
+                .delete()
+                .eq('product_id', id);
+
+            // 3. Delete Related Specifications from database
+            await supabase
+                .schema('TechVault')
+                .from('Product_Specifications')
+                .delete()
+                .eq('product_id', id);
+
+            // 4. Finally, delete the Product record
             const { error } = await supabase
                 .schema('TechVault')
                 .from('Products')
@@ -224,7 +279,28 @@ export class ProductController {
                 return res.status(400).json({ error: error.message });
             }
 
-            res.status(200).json({ message: 'Product deleted successfully' });
+            // 5. Cleanup Storage (Best effort)
+            if (images && images.length > 0) {
+                const pathsToDelete = images
+                    .map(img => {
+                        // Extract path after '/public/products/'
+                        const parts = img.image_url.split('/public/products/');
+                        return parts.length > 1 ? parts[1] : null;
+                    })
+                    .filter((path): path is string => path !== null);
+
+                if (pathsToDelete.length > 0) {
+                    const { error: storageError } = await supabase.storage
+                        .from('products')
+                        .remove(pathsToDelete);
+                    
+                    if (storageError) {
+                        console.error('Error cleaning up storage:', storageError.message);
+                    }
+                }
+            }
+
+            res.status(200).json({ message: 'Product and related media deleted successfully' });
         } catch (error) {
             next(error);
         }

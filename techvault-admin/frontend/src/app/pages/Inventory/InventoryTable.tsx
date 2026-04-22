@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/client';
 import { handleDelete } from '@/app/components/buttons/Delete-Button';
 import { SaveButton } from '@/app/components/buttons/Save-Button';
 import { useSave } from '@/app/hooks/useSave';
+import { UploadImageLoader } from '@/app/components/loading/uploadImage';
 
 // Subset of Product used in the create/edit form
 type ProductFormData = {
@@ -74,6 +75,9 @@ export default function Inventory() {
   });
 
   const [isUploading, setIsUploading] = useState(false);
+  const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
+  // Key: blob preview URL, Value: actual File object
+  const [galleryFilesMap, setGalleryFilesMap] = useState<Map<string, File>>(new Map());
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
@@ -111,6 +115,14 @@ export default function Inventory() {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setEditingProduct(null);
+    setThumbnailFile(null);
+    galleryFilesMap.forEach((_, url) => URL.revokeObjectURL(url));
+    setGalleryFilesMap(new Map());
+
+    // Revoke object URLs to avoid memory leaks
+    if (formData.thumbnailUrl.startsWith('blob:')) {
+      URL.revokeObjectURL(formData.thumbnailUrl);
+    }
   };
 
   const handleOpenModal = (product?: Product) => {
@@ -170,50 +182,60 @@ export default function Inventory() {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
-    setIsUploading(true);
-    try {
-      const supabase = createClient();
-      const urls: string[] = [];
+    if (type === 'thumbnail') {
+      const file = files[0];
+      setThumbnailFile(file);
+      const previewUrl = URL.createObjectURL(file);
+      setFormData(prev => ({ ...prev, thumbnailUrl: previewUrl }));
+    } else {
+      const newFiles = Array.from(files);
+      const newMap = new Map(galleryFilesMap);
+      const previewUrls: string[] = [];
 
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
-        const filePath = `products/${fileName}`;
+      newFiles.forEach(file => {
+        const url = URL.createObjectURL(file);
+        newMap.set(url, file);
+        previewUrls.push(url);
+      });
 
-        const { error: uploadError } = await supabase.storage
-          .from('products')
-          .upload(filePath, file);
-
-        if (uploadError) {
-          console.error('Upload error:', uploadError.message);
-          continue;
-        }
-
-        const { data: { publicUrl } } = supabase.storage
-          .from('products')
-          .getPublicUrl(filePath);
-
-        urls.push(publicUrl);
-      }
-
-      if (type === 'thumbnail') {
-        setFormData(prev => ({ ...prev, thumbnailUrl: urls[0] }));
-      } else {
-        setFormData(prev => ({ ...prev, galleryUrls: [...prev.galleryUrls, ...urls] }));
-      }
-    } catch (error) {
-      console.error('File upload failed:', error);
-    } finally {
-      setIsUploading(false);
+      setGalleryFilesMap(newMap);
+      setFormData(prev => ({ ...prev, galleryUrls: [...prev.galleryUrls, ...previewUrls] }));
     }
   };
 
   const removeGalleryImage = (index: number) => {
+    const urlToRemove = formData.galleryUrls[index];
+    if (urlToRemove.startsWith('blob:')) {
+      URL.revokeObjectURL(urlToRemove);
+      const newMap = new Map(galleryFilesMap);
+      newMap.delete(urlToRemove);
+      setGalleryFilesMap(newMap);
+    }
     setFormData(prev => ({
       ...prev,
       galleryUrls: prev.galleryUrls.filter((_, i) => i !== index)
     }));
+  };
+
+  const uploadFile = async (file: File): Promise<string> => {
+    const supabase = createClient();
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+    const filePath = `products/${fileName}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from('products')
+      .upload(filePath, file);
+
+    if (uploadError) {
+      throw new Error(`Upload error: ${uploadError.message}`);
+    }
+
+    const { data: { publicUrl } } = supabase.storage
+      .from('products')
+      .getPublicUrl(filePath);
+
+    return publicUrl;
   };
 
   const addSpecRow = () => {
@@ -237,7 +259,7 @@ export default function Inventory() {
   };
 
   // Generic save handler — fully driven by useSave hook
-  const getCleanData = () => {
+  const getCleanData = (thumbnailUrlOverride?: string, galleryUrlsOverride?: string[]) => {
     // Convert specs array back to JSON object for backend
     const specsObject = formData.specs.reduce((acc: any, curr) => {
       if (curr.key.trim()) {
@@ -245,6 +267,9 @@ export default function Inventory() {
       }
       return acc;
     }, {});
+
+    const thumbUrl = thumbnailUrlOverride || formData.thumbnailUrl;
+    const gUrls = galleryUrlsOverride || formData.galleryUrls;
 
     return {
       name: formData.name,
@@ -254,20 +279,64 @@ export default function Inventory() {
       stock: typeof formData.stock === 'string' ? parseInt(formData.stock, 10) || 0 : formData.stock,
       rating: formData.rating,
       images: [
-        ...(formData.thumbnailUrl ? [{ image_url: formData.thumbnailUrl, is_main: true }] : []),
-        ...formData.galleryUrls.map(url => ({ image_url: url, is_main: false }))
+        ...(thumbUrl ? [{ image_url: thumbUrl, is_main: true }] : []),
+        ...gUrls.map(url => ({ image_url: url, is_main: false }))
       ],
       specs: specsObject,
     };
   };
 
-  const handleSave = useSave<any>({
-    endpoint: 'products',
-    editingId: editingProduct?.product_id,
-    formData: getCleanData(),
-    onSuccess: fetchProducts,
-    onClose: handleCloseModal,
-  });
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsUploading(true);
+
+    try {
+      // 1. Handle Thumbnail Upload
+      let finalThumbnailUrl = formData.thumbnailUrl;
+      if (thumbnailFile && finalThumbnailUrl.startsWith('blob:')) {
+        finalThumbnailUrl = await uploadFile(thumbnailFile);
+      }
+
+      // 2. Handle Gallery Uploads
+      const finalGalleryUrls = await Promise.all(
+        formData.galleryUrls.map(async (url) => {
+          if (url.startsWith('blob:')) {
+            const file = galleryFilesMap.get(url);
+            if (file) return await uploadFile(file);
+          }
+          return url;
+        })
+      );
+
+      // 3. Submit Data
+      const token = await getAuthToken();
+      const payload = getCleanData(finalThumbnailUrl, finalGalleryUrls);
+      const method = editingProduct ? 'PUT' : 'POST';
+      const endpoint = editingProduct ? `${apiUrl}/api/products/${editingProduct.product_id}` : `${apiUrl}/api/products`;
+
+      const res = await fetch(endpoint, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (res.ok) {
+        await fetchProducts();
+        handleCloseModal();
+      } else {
+        const error = await res.json();
+        alert(`Error: ${error.message || 'Failed to save product'}`);
+      }
+    } catch (error) {
+      console.error('Error during save:', error);
+      alert('An unexpected error occurred while saving.');
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
   useEffect(() => {
     fetchProducts();
@@ -277,6 +346,7 @@ export default function Inventory() {
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Inventory Management</h1>
@@ -377,6 +447,7 @@ export default function Inventory() {
             </div>
 
             <form onSubmit={handleSave} className="flex-1 flex flex-col min-h-0 overflow-hidden bg-gray-50/20">
+              {isUploading && <UploadImageLoader />}
               <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-0 overflow-hidden">
 
                 {/* Column 1: Media (Left) - Separate Scroll */}
