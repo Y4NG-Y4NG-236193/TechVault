@@ -3,7 +3,7 @@ import { Loader2 } from 'lucide-react';
 
 export const UploadImageLoader = () => {
     return (
-        <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-white/60 backdrop-blur-md animate-in fade-in duration-300">
+        <div className="fixed inset-0 z-100 flex flex-col items-center justify-center bg-white/60 backdrop-blur-md animate-in fade-in duration-300">
             <div className="relative flex flex-col items-center">
                 {/* Animated Glow Effect */}
                 <div className="absolute -inset-8 bg-indigo-500/20 rounded-full blur-3xl animate-pulse" />

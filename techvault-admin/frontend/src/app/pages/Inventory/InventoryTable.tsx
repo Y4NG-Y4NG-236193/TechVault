@@ -6,19 +6,19 @@ import { createClient } from '@/lib/supabase/client';
 import { handleDelete } from '@/app/components/buttons/Delete-Button';
 import { SaveButton } from '@/app/components/buttons/Save-Button';
 import { useSave } from '@/app/hooks/useSave';
-import { UploadImageLoader } from '@/app/components/loading/uploadImage';
+import { UploadImageLoader } from '@/app/components/loading/uploadImageLoad';
 
 // Subset of Product used in the create/edit form
 type ProductFormData = {
   name: string;
   description: string;
-  price: number | string;
+  price: number | string; // string is used for the empty value in the input field
   brand: string;
-  stock: number | string;
+  stock: number | string; // string is used for the empty value in the input field
   rating: number;
   thumbnailUrl: string;
-  galleryUrls: string[];
-  specs: { key: string; value: string }[];
+  galleryUrls: string[]; // the images in the gallery converted into arrays
+  specs: { key: string; value: string }[]; // the specs in the form
 };
 
 interface ProductImage {

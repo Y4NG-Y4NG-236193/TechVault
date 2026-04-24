@@ -123,3 +123,10 @@ git checkout -b feature                          # create feature branch
 git add .                                        # stage changes
 git commit -m "update"                           # commit changes
 git push origin feature                          # push branch
+
+## Commit Message Format:
+
+feat: new feature
+fix: bug fix
+docs: documentation
+refactor: code improvement
