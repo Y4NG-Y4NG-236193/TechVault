@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit2, Trash2, Search, X, Upload, Image as ImageIcon, Settings, Link as LinkIcon, PlusCircle } from 'lucide-react';
+import { Plus, Edit2, Trash2, Search, X, Upload, Image as ImageIcon, Settings, Link as LinkIcon, PlusCircle, Sparkles } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { handleDelete } from '@/app/components/buttons/Delete-Button';
 import { SaveButton } from '@/app/components/buttons/Save-Button';
@@ -78,6 +78,7 @@ export default function Inventory() {
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
   // Key: blob preview URL, Value: actual File object
   const [galleryFilesMap, setGalleryFilesMap] = useState<Map<string, File>>(new Map());
+  const [isGeneratingAI, setIsGeneratingAI] = useState(false);
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
@@ -338,6 +339,51 @@ export default function Inventory() {
     }
   };
 
+  const handleGenerateAIDescription = async () => {
+    if (!formData.name) {
+      alert('Please enter a product name first.');
+      return;
+    }
+
+    setIsGeneratingAI(true);
+    try {
+      const token = await getAuthToken();
+      // Convert specs array back to JSON object for backend
+      const specsObject = formData.specs.reduce((acc: any, curr) => {
+        if (curr.key.trim()) {
+          acc[curr.key.trim()] = curr.value;
+        }
+        return acc;
+      }, {});
+
+      const res = await fetch(`${apiUrl}/api/ai/generate-description`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          brand: formData.brand,
+          specs: specsObject
+        })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setFormData(prev => ({ ...prev, description: data.description }));
+      } else {
+        const errorData = await res.json().catch(() => ({}));
+        console.error('Failed to generate AI description:', errorData.message || res.statusText);
+        alert(`AI Generation Error: ${errorData.message || res.statusText}`);
+      }
+    } catch (error) {
+      console.error('Error generating AI description:', error);
+    } finally {
+      setIsGeneratingAI(false);
+    }
+  };
+
   useEffect(() => {
     fetchProducts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -580,14 +626,40 @@ export default function Inventory() {
                       </div>
 
                       <div className="group">
-                        <label className="block text-[10px] font-bold text-gray-400 uppercase mb-2 ml-1">Catalogue Description</label>
-                        <textarea
-                          placeholder="Compose a compelling product story..."
-                          value={formData.description}
-                          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                          className="w-full px-5 py-4 bg-gray-50/50 border border-transparent rounded-2xl focus:bg-white focus:border-indigo-500 focus:shadow-[0_8px_30_rgba(0,0,0,0.04)] transition-all min-h-[180px] resize-none leading-relaxed text-gray-600"
-                          rows={6}
-                        />
+                        <div className="flex justify-between items-center mb-2 ml-1">
+                          <label className="block text-[10px] font-bold text-gray-400 uppercase">Catalogue Description</label>
+                          <button
+                            type="button"
+                            onClick={handleGenerateAIDescription}
+                            disabled={isGeneratingAI}
+                            className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-[10px] font-bold transition-all ${
+                              isGeneratingAI 
+                                ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
+                                : 'bg-indigo-50 text-indigo-600 hover:bg-indigo-600 hover:text-white shadow-sm hover:shadow-indigo-200'
+                            }`}
+                          >
+                            <Sparkles className={`h-3 w-3 ${isGeneratingAI ? 'animate-pulse' : ''}`} />
+                            {isGeneratingAI ? 'Generating...' : 'AI Suggest'}
+                          </button>
+                        </div>
+                        <div className="relative">
+                          <textarea
+                            placeholder="Compose a compelling product story..."
+                            value={formData.description}
+                            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                            className={`w-full px-5 py-4 bg-gray-50/50 border border-transparent rounded-2xl focus:bg-white focus:border-indigo-500 focus:shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all min-h-[180px] resize-none leading-relaxed text-gray-600 ${
+                              isGeneratingAI ? 'opacity-50 pointer-events-none' : ''
+                            }`}
+                            rows={6}
+                          />
+                          {isGeneratingAI && (
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <div className="h-1 w-24 bg-indigo-100 rounded-full overflow-hidden">
+                                <div className="h-full bg-indigo-500 animate-[shimmer_2s_infinite]" style={{ width: '50%' }} />
+                              </div>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>

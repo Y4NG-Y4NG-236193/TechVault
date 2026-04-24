@@ -59,5 +59,10 @@ body {
     scrollbar-width: thin;
     scrollbar-color: #e2e8f0 transparent;
   }
+
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(200%); }
+  }
 }
 

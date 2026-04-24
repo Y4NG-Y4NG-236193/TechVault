@@ -130,3 +130,13 @@ feat: new feature
 fix: bug fix
 docs: documentation
 refactor: code improvement
+design: design improvement
+test: test improvement
+style: style improvement
+perf: performance improvement
+ui: ui improvement
+ux: ux improvement
+build: build improvement
+chore: chore improvement
+type: type improvement
+theme: theme improvement
