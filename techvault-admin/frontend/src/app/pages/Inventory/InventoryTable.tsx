@@ -451,7 +451,7 @@ export default function Inventory() {
               <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-0 overflow-hidden">
 
                 {/* Column 1: Media (Left) - Separate Scroll */}
-                <div className="lg:col-span-3 h-full overflow-y-auto p-8 border-r border-gray-100 space-y-8 custom-scrollbar">
+                <div className="lg:col-span-4 h-full overflow-y-auto p-8 border-r border-gray-100 space-y-8 custom-scrollbar">
                   <div className="flex items-center gap-2 text-indigo-600 font-bold text-xs uppercase tracking-widest px-1">
                     <ImageIcon className="h-4 w-4" /> Gallery & Media
                   </div>
@@ -594,7 +594,7 @@ export default function Inventory() {
                 </div>
 
                 {/* Column 3: Technical Specs (Right) - Separate Scroll */}
-                <div className="lg:col-span-5 h-full overflow-y-auto p-8 space-y-8 custom-scrollbar">
+                <div className="lg:col-span-4 h-full overflow-y-auto p-8 space-y-8 custom-scrollbar">
                   <div className="flex justify-between items-center px-1">
                     <div className="flex items-center gap-2 text-indigo-600 font-bold text-xs uppercase tracking-widest">
                       <PlusCircle className="h-4 w-4" /> Technical Specifications
