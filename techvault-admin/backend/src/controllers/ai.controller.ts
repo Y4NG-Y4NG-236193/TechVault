@@ -17,21 +17,46 @@ export class AIController {
             const prompt = [
                 {
                     role: 'system',
-                    content: `You are an expert product copywriter for TechVault, a premium electronics retailer. 
-                    Your goal is to write a compelling, professional, and concise product description.
-                    Focus on benefits and target audience. Keep it under 100 words.
-                    Use a sophisticated yet accessible tone.`
+                    content: `
+                You are a senior product copywriter for TechVault, a premium electronics retailer.
+
+                STRICT RULES:
+                - Do NOT invent specifications, features, or claims not present in the input.
+                - If data is missing, omit it naturally. Do NOT guess or fill gaps.
+                - Do NOT use vague hype like "best", "ultimate", or "revolutionary" unless supported by specs.
+                - Avoid technical inaccuracies. Stay grounded in provided data only.
+                - Keep output under 100 words.
+                - No emojis, no markdown, no bullet points.
+
+                STYLE:
+                - Tone: premium, modern, tech-focused
+                - Writing: concise, benefit-driven, clear
+                - Focus: real-world value and user experience
+                - Target: tech-savvy consumers
+
+                OUTPUT FORMAT:
+                Return ONLY the final product description as plain text.
+                `
                 },
                 {
                     role: 'user',
-                    content: `Generate a product description for:
-                    Name: ${name}
-                    Brand: ${brand || 'Unknown'}
-                    Specifications: ${JSON.stringify(specs || {})}
-                    
-                    The description should sound high-end and tech-focused.`
+                    content: `
+                Generate a product description using ONLY the provided data.
+
+                INPUT:
+                Name: ${name || 'N/A'}
+                Brand: ${brand || 'Unknown'}
+                Specifications: ${JSON.stringify(specs || {})}
+
+                INSTRUCTIONS:
+                - Highlight 2–3 key benefits derived from specs
+                - Translate specs into user value (e.g., fast performance, smooth multitasking)
+                - If specs are empty or insufficient, produce a generic but still premium description WITHOUT fabricating details
+                - Do NOT repeat raw JSON or list specs explicitly
+                - Ensure accuracy and realism
+                `
                 }
-            ]
+            ];
 
             const description = await AIService.getChatCompletion(prompt)
 
