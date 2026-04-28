@@ -1,20 +1,123 @@
 <mxfile host="app.diagrams.net">
   <diagram name="Page-1" id="7jEEnwGSbGQ9YuERxCwW">
-    <mxGraphModel dx="501" dy="658" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="548" dy="731" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="iRtOR4c1H5JokSyUzZ0d-35" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="" vertex="1">
+          <mxGeometry height="1120" width="570" x="150" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="iRtOR4c1H5JokSyUzZ0d-8" edge="1" parent="1" source="RIM427N2f4PVStd9wBQW-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="RIM427N2f4PVStd9wBQW-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
         <mxCell id="RIM427N2f4PVStd9wBQW-1" parent="1" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/azure_stack/User_Subscriptions.svg;" value="" vertex="1">
           <mxGeometry height="66" width="68" x="310" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="iRtOR4c1H5JokSyUzZ0d-1" edge="1" parent="1" source="RIM427N2f4PVStd9wBQW-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="ow8syoF-5MTw8LeSItwj-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="iRtOR4c1H5JokSyUzZ0d-37" edge="1" parent="1" source="RIM427N2f4PVStd9wBQW-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;" target="iRtOR4c1H5JokSyUzZ0d-36">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="RIM427N2f4PVStd9wBQW-2" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" value="Enters (Product Name, Brand, Technical Specifications)" vertex="1">
           <mxGeometry height="60" width="214" x="237" y="220" as="geometry" />
         </mxCell>
-        <mxCell id="ow8syoF-5MTw8LeSItwj-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="handleGenerateAIDescription sends a POST request to (backend/controllers/ai.controller.ts)" vertex="1">
-          <mxGeometry height="80" width="224" x="232" y="420" as="geometry" />
+        <mxCell id="iRtOR4c1H5JokSyUzZ0d-7" edge="1" parent="1" source="ow8syoF-5MTw8LeSItwj-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;" target="iRtOR4c1H5JokSyUzZ0d-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="iRtOR4c1H5JokSyUzZ0d-17" edge="1" parent="1" source="ow8syoF-5MTw8LeSItwj-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="iRtOR4c1H5JokSyUzZ0d-14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ow8syoF-5MTw8LeSItwj-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=center;" value="&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;`handleGenerateAIDescription` in `InventoryTable.tsx` sends a `POST` request to `http://localhost:4000/api/ai/generate-description` with the `name`, `brand`, and `specs` in the body, authenticated via a Bearer token.&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="120" width="248" x="220" y="460" as="geometry" />
+        </mxCell>
+        <mxCell id="iRtOR4c1H5JokSyUzZ0d-2" edge="1" parent="1" source="ow8syoF-5MTw8LeSItwj-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="ow8syoF-5MTw8LeSItwj-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="iRtOR4c1H5JokSyUzZ0d-5" edge="1" parent="1" source="ow8syoF-5MTw8LeSItwj-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;" target="iRtOR4c1H5JokSyUzZ0d-4">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="ow8syoF-5MTw8LeSItwj-2" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" value="Clicks the &#39;AI Suggest&#39; button" vertex="1">
-          <mxGeometry height="60" width="214" x="237" y="320" as="geometry" />
+          <mxGeometry height="60" width="214" x="237" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="iRtOR4c1H5JokSyUzZ0d-3" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="API Request" vertex="1">
+          <mxGeometry height="30" width="80" x="345" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="iRtOR4c1H5JokSyUzZ0d-4" parent="1" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;" value="InventoryTable.tsx" vertex="1">
+          <mxGeometry height="40" width="120" x="480" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="iRtOR4c1H5JokSyUzZ0d-6" parent="1" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;" value="InventoryTable.tsx" vertex="1">
+          <mxGeometry height="40" width="120" x="480" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="iRtOR4c1H5JokSyUzZ0d-16" edge="1" parent="1" source="iRtOR4c1H5JokSyUzZ0d-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;" target="iRtOR4c1H5JokSyUzZ0d-15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="iRtOR4c1H5JokSyUzZ0d-19" edge="1" parent="1" source="iRtOR4c1H5JokSyUzZ0d-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="iRtOR4c1H5JokSyUzZ0d-18">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="iRtOR4c1H5JokSyUzZ0d-14" parent="1" style="whiteSpace=wrap;html=1;" value="routes the request to `ai.routes.ts` which passes it to `AIController.generateProductDescription`" vertex="1">
+          <mxGeometry height="80" width="244" x="222" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="iRtOR4c1H5JokSyUzZ0d-15" parent="1" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;" value="backend/app.ts" vertex="1">
+          <mxGeometry height="40" width="120" x="480" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="iRtOR4c1H5JokSyUzZ0d-21" edge="1" parent="1" source="iRtOR4c1H5JokSyUzZ0d-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="iRtOR4c1H5JokSyUzZ0d-20">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="iRtOR4c1H5JokSyUzZ0d-23" edge="1" parent="1" source="iRtOR4c1H5JokSyUzZ0d-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;" target="iRtOR4c1H5JokSyUzZ0d-22">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="470" y="810" />
+              <mxPoint x="470" y="885" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="iRtOR4c1H5JokSyUzZ0d-18" parent="1" style="whiteSpace=wrap;html=1;" value="The `AIController` validates the input and constructs a tailored system prompt instructing the AI to act as an expert TechVault copywriter." vertex="1">
+          <mxGeometry height="80" width="244" x="222" y="770" as="geometry" />
+        </mxCell>
+        <mxCell id="iRtOR4c1H5JokSyUzZ0d-31" edge="1" parent="1" source="iRtOR4c1H5JokSyUzZ0d-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;" target="iRtOR4c1H5JokSyUzZ0d-22">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="470" y="950" />
+              <mxPoint x="470" y="885" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="iRtOR4c1H5JokSyUzZ0d-41" edge="1" parent="1" source="iRtOR4c1H5JokSyUzZ0d-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="iRtOR4c1H5JokSyUzZ0d-40">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="iRtOR4c1H5JokSyUzZ0d-20" parent="1" style="whiteSpace=wrap;html=1;" value="The controller calls `AIService.getChatCompletion(prompt)`, which utilizes the Groq SDK to request a completion using the `groq/compound` model." vertex="1">
+          <mxGeometry height="80" width="244" x="222" y="910" as="geometry" />
+        </mxCell>
+        <mxCell id="iRtOR4c1H5JokSyUzZ0d-22" parent="1" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;" value="backend/controllers/ai.controller.ts" vertex="1">
+          <mxGeometry height="60" width="190" x="480" y="855" as="geometry" />
+        </mxCell>
+        <mxCell id="iRtOR4c1H5JokSyUzZ0d-24" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Backend Routing" vertex="1">
+          <mxGeometry height="30" width="100" x="351" y="600" as="geometry" />
+        </mxCell>
+        <mxCell id="iRtOR4c1H5JokSyUzZ0d-25" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Prompt Construction" vertex="1">
+          <mxGeometry height="30" width="120" x="351" y="730" as="geometry" />
+        </mxCell>
+        <mxCell id="iRtOR4c1H5JokSyUzZ0d-26" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="AI Service Call" vertex="1">
+          <mxGeometry height="30" width="90" x="351" y="870" as="geometry" />
+        </mxCell>
+        <mxCell id="iRtOR4c1H5JokSyUzZ0d-29" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Response" vertex="1">
+          <mxGeometry height="30" width="60" x="351" y="1020" as="geometry" />
+        </mxCell>
+        <mxCell id="iRtOR4c1H5JokSyUzZ0d-32" parent="1" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;" value="InventoryTable.tsx" vertex="1">
+          <mxGeometry height="40" width="130" x="480" y="1090" as="geometry" />
+        </mxCell>
+        <mxCell id="iRtOR4c1H5JokSyUzZ0d-36" parent="1" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;" value="InventoryTable.tsx" vertex="1">
+          <mxGeometry height="40" width="120" x="480" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="iRtOR4c1H5JokSyUzZ0d-38" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="AI Generated Product Description Workflow" vertex="1">
+          <mxGeometry height="60" width="255" x="425" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="iRtOR4c1H5JokSyUzZ0d-42" edge="1" parent="1" source="iRtOR4c1H5JokSyUzZ0d-40" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;" target="iRtOR4c1H5JokSyUzZ0d-32">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="iRtOR4c1H5JokSyUzZ0d-40" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" value="&#xa;&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Helvetica; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;The backend returns the generated text. The frontend receives it, populates the `description` form data, and removes the loading state.&lt;/span&gt;&#xa;&#xa;" vertex="1">
+          <mxGeometry height="90" width="330" x="138" y="1065" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
