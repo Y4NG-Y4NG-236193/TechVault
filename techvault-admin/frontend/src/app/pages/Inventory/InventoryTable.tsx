@@ -341,7 +341,7 @@ export default function Inventory() {
 
   const handleGenerateAIDescription = async () => {
     if (!formData.name) {
-      alert('Please enter a product name first.');
+      alert('Please fill the (name, brand, technical specifications) first.');
       return;
     }
 
@@ -632,11 +632,10 @@ export default function Inventory() {
                             type="button"
                             onClick={handleGenerateAIDescription}
                             disabled={isGeneratingAI}
-                            className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-[10px] font-bold transition-all ${
-                              isGeneratingAI 
-                                ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
+                            className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-[10px] font-bold transition-all ${isGeneratingAI
+                                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                                 : 'bg-indigo-50 text-indigo-600 hover:bg-indigo-600 hover:text-white shadow-sm hover:shadow-indigo-200'
-                            }`}
+                              }`}
                           >
                             <Sparkles className={`h-3 w-3 ${isGeneratingAI ? 'animate-pulse' : ''}`} />
                             {isGeneratingAI ? 'Generating...' : 'AI Suggest'}
@@ -647,9 +646,8 @@ export default function Inventory() {
                             placeholder="Compose a compelling product story..."
                             value={formData.description}
                             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                            className={`w-full px-5 py-4 bg-gray-50/50 border border-transparent rounded-2xl focus:bg-white focus:border-indigo-500 focus:shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all min-h-[180px] resize-none leading-relaxed text-gray-600 ${
-                              isGeneratingAI ? 'opacity-50 pointer-events-none' : ''
-                            }`}
+                            className={`w-full px-5 py-4 bg-gray-50/50 border border-transparent rounded-2xl focus:bg-white focus:border-indigo-500 focus:shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all min-h-[180px] resize-none leading-relaxed text-gray-600 ${isGeneratingAI ? 'opacity-50 pointer-events-none' : ''
+                              }`}
                             rows={6}
                           />
                           {isGeneratingAI && (
