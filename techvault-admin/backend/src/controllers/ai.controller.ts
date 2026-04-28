@@ -10,8 +10,8 @@ export class AIController {
             const { name, brand, specs } = req.body
             console.log('[AIController] Generating description for:', { name, brand });
 
-            if (!name) {
-                return res.status(400).json({ error: 'Product name is required' })
+            if (!name && !brand && !specs) {
+                return res.status(400).json({ error: 'Product name, brand, and technical specifications are required' })
             }
 
             const prompt = [
