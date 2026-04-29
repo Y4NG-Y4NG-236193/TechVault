@@ -81,14 +81,14 @@ export function InventoryList({
                   </td>
                   <td className="px-6 py-4 text-right">
                     <div className="flex items-center justify-end gap-2">
-                      <button 
-                        onClick={() => onEdit(product)} 
+                      <button
+                        onClick={() => onEdit(product)}
                         className="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
                       >
                         <Edit2 className="h-4 w-4" />
                       </button>
-                      <button 
-                        onClick={() => handleDelete('products', product.product_id, onRefresh)} 
+                      <button
+                        onClick={() => handleDelete('products', product.product_id, onRefresh)}
                         className="p-2 text-gray-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
                       >
                         <Trash2 className="h-4 w-4" />
