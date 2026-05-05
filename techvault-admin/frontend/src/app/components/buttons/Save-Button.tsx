@@ -27,7 +27,7 @@ export function SaveButton({ label = 'Save', className }: SaveButtonProps) {
       type="submit"
       className={
         className ??
-        'w-full px-6 py-4 text-xs font-black uppercase tracking-[0.2em] text-brand-carbon bg-transparent border-2 border-brand-lime hover:border-transparent hover:bg-[#bef264] rounded-xl transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.98]'
+        'w-full px-6 py-4 text-xs font-black uppercase tracking-[0.2em] text-brand-carbon bg-brand-lime border border-transparent hover:border-black rounded-xl transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.98]'
       }
     >
       {label}

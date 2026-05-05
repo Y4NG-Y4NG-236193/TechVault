@@ -285,10 +285,10 @@ export function ProductModal({
 
         <form onSubmit={handleInternalSave} className="flex-1 flex flex-col min-h-0 overflow-hidden bg-zinc-50/30">
           {isUploading && <UploadImageLoader />}
-          <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-0 overflow-hidden">
+          <div className="flex-1 grid grid-cols-1 lg:grid-cols-8 gap-0 overflow-hidden">
 
             {/* Column 1: Media (Left) */}
-            <div className="lg:col-span-4 h-full overflow-y-auto p-8 border-r border-zinc-100 space-y-8 custom-scrollbar bg-white">
+            <div className="lg:col-span-2 h-full overflow-y-auto p-8 border-r border-zinc-100 space-y-8 custom-scrollbar bg-white">
               <div className="flex items-center gap-2 text-brand-carbon font-bold text-[10px] uppercase tracking-[0.2em] px-1">
                 <ImageIcon className="h-4 w-4 text-brand-lime" /> Gallery & Media
               </div>
@@ -332,7 +332,7 @@ export function ProductModal({
               <div className="bg-zinc-50 p-6 rounded-3xl border border-zinc-100 space-y-5">
                 <div className="flex justify-between items-center">
                   <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Gallery List</span>
-                  <label className="cursor-pointer p-1.5 bg-transparent border-2 border-brand-lime hover:border-transparent hover:bg-[#bef264] rounded-lg transition-colors group">
+                  <label className="cursor-pointer p-1.5 bg-[#bef264] border-2 border-transparent hover:border-black rounded-lg transition-colors group">
                     <Plus className="h-4 w-4 text-brand-carbon group-hover:text-brand-carbon" />
                     <input type="file" multiple className="hidden" onChange={(e) => handleFileUpload(e, 'gallery')} accept="image/*" />
                   </label>
@@ -359,12 +359,12 @@ export function ProductModal({
             </div>
 
             {/* Column 2: General Info */}
-            <div className="lg:col-span-4 h-full overflow-y-auto p-8 border-r border-zinc-100 space-y-8 custom-scrollbar">
+            <div className="lg:col-span-3 h-full overflow-y-auto p-8 border-r border-zinc-100 space-y-8 custom-scrollbar">
               <div className="flex items-center gap-2 text-brand-carbon font-bold text-[10px] uppercase tracking-[0.2em] px-1">
                 <Settings className="h-4 w-4 text-brand-lime" /> Global Properties
               </div>
 
-              <div className="bg-white p-8 rounded-[2rem] border border-zinc-100 space-y-6">
+              <div className="bg-white p-8 rounded-4xl border border-zinc-100 space-y-6">
                 <div className="space-y-5">
                   <div className="group">
                     <label className="block text-[10px] font-bold text-zinc-400 uppercase mb-2 ml-1">Product Name</label>
@@ -437,7 +437,7 @@ export function ProductModal({
                         placeholder="Compose a compelling product story..."
                         value={formData.description}
                         onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                        className={`w-full px-5 py-4 bg-zinc-50 border border-zinc-100 rounded-2xl focus:bg-white focus:border-brand-lime transition-all min-h-[180px] resize-none leading-relaxed text-zinc-600 text-sm ${isGeneratingAI ? 'opacity-50 pointer-events-none' : ''
+                        className={`w-full px-5 py-4 bg-zinc-50 border border-zinc-100 rounded-2xl focus:bg-white focus:border-brand-lime transition-all min-h-[500px] resize-none leading-relaxed text-zinc-600 text-sm ${isGeneratingAI ? 'opacity-50 pointer-events-none' : ''
                           }`}
                         rows={6}
                       />
@@ -448,7 +448,7 @@ export function ProductModal({
             </div>
 
             {/* Column 3: Technical Specs */}
-            <div className="lg:col-span-4 h-full overflow-y-auto p-8 space-y-8 custom-scrollbar bg-white">
+            <div className="lg:col-span-3 h-full overflow-y-auto p-8 space-y-8 custom-scrollbar bg-white">
               <div className="flex justify-between items-center px-1">
                 <div className="flex items-center gap-2 text-brand-carbon font-bold text-[10px] uppercase tracking-[0.2em]">
                   <PlusCircle className="h-4 w-4 text-brand-lime" /> Technical Specs

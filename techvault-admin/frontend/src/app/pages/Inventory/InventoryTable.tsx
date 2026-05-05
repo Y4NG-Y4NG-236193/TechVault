@@ -63,7 +63,7 @@ export default function Inventory() {
         </div>
         <button
           onClick={() => handleOpenModal()}
-          className="flex items-center gap-2 bg-transparent hover:bg-[#bef264] text-brand-carbon border-2 border-brand-lime hover:border-transparent px-6 py-3 rounded-xl transition-all font-bold uppercase text-xs tracking-widest cursor-pointer"
+          className="flex items-center gap-2 bg-[#bef264] text-brand-carbon border-2 border-transparent hover:border-black px-6 py-3 rounded-xl transition-all font-bold uppercase text-xs tracking-widest cursor-pointer"
         >
           <Plus className="h-5 w-5" />
           Add Product
