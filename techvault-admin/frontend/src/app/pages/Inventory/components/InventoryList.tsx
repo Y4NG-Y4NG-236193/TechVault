@@ -73,15 +73,22 @@ export function InventoryList({
                     <div className="text-zinc-500 text-xs truncate max-w-xs">{product.description}</div>
                   </td>
                   <td className="px-6 py-4">
-                    <span className="px-2 py-1 bg-zinc-100 text-zinc-600 rounded text-[10px] font-bold uppercase tracking-wider">
+                    <span className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em] border-b border-zinc-100 pb-0.5">
                       {product.brand || 'GENERIC'}
                     </span>
                   </td>
                   <td className="px-6 py-4 font-black text-brand-carbon">₱{Number(product.price).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                   <td className="px-6 py-4">
-                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${Number(product.stock) > 10 ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' : Number(product.stock) > 0 ? 'bg-amber-50 text-amber-700 border border-amber-100' : 'bg-rose-50 text-rose-700 border border-rose-100'}`}>
-                      {product.stock} IN STOCK
-                    </span>
+                    <div className={`inline-flex items-center h-7 px-3 rounded-r-md border-l-4 bg-zinc-50/80 transition-all ${Number(product.stock) > 10
+                      ? 'border-[#bef264]'
+                      : Number(product.stock) > 0
+                        ? 'border-amber-400'
+                        : 'border-rose-500'
+                      }`}>
+                      <span className="text-[10px] font-black text-brand-carbon uppercase tracking-[0.15em]">
+                        {Number(product.stock) === 0 ? 'DEPLETED' : `${product.stock} ITEMS`}
+                      </span>
+                    </div>
                   </td>
                   <td className="px-6 py-4 text-right">
                     <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
