@@ -3,11 +3,19 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --brand-carbon: #09090b;
+  --brand-surface: #18181b;
+  --brand-lime: #bef264;
+  --brand-white: #fafafa;
 }
 
 @theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-brand-carbon: var(--brand-carbon);
+  --color-brand-surface: var(--brand-surface);
+  --color-brand-lime: var(--brand-lime);
+  --color-brand-white: var(--brand-white);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
