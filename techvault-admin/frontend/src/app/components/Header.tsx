@@ -16,16 +16,6 @@ export default function Header() {
           <span className="text-lg font-black tracking-tighter text-[#fafafa] uppercase">TechVault</span>
         </div>
 
-        <div className="relative w-full max-w-md hidden sm:block">
-          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-            <Search className="h-5 w-5 text-zinc-500" />
-          </div>
-          <input
-            type="text"
-            className="block w-full rounded-xl border border-[#18181b] bg-[#18181b] py-2.5 pl-10 pr-3 text-sm text-[#fafafa] placeholder-zinc-500 outline-none transition-all focus:border-[#bef264] focus:ring-4 focus:ring-[#bef264]/10"
-            placeholder="Search analytics, orders, or workflows..."
-          />
-        </div>
       </div>
 
       {/* Right: Actions */}

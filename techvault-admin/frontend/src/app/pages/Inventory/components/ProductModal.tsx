@@ -271,69 +271,69 @@ export function ProductModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/40 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-white rounded-3xl w-full max-w-7xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200 h-[90vh] flex flex-col">
-        <div className="flex justify-between items-center p-6 border-b border-gray-100 shrink-0 bg-white z-10">
-          <h2 className="text-xl font-bold text-gray-900 flex items-center gap-3">
-            <div className="h-8 w-1.5 bg-indigo-600 rounded-full" />
-            {editingProduct ? 'Edit Product' : 'Add New Product'}
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand-carbon/60 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="bg-brand-white rounded-3xl w-full max-w-7xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200 h-[90vh] flex flex-col border border-zinc-200">
+        <div className="flex justify-between items-center p-6 border-b border-zinc-100 shrink-0 bg-white z-10">
+          <h2 className="text-xl font-black text-brand-carbon flex items-center gap-3 uppercase tracking-tighter">
+            <div className="h-8 w-1.5 bg-[#bef264] rounded-full" />
+            {editingProduct ? 'Edit Product' : 'Register Product'}
           </h2>
-          <button onClick={onClose} className="p-2 text-gray-400 hover:text-gray-500 hover:bg-gray-100 rounded-xl transition-all">
+          <button onClick={onClose} className="p-2 text-zinc-400 hover:text-brand-carbon hover:bg-zinc-100 rounded-xl transition-all">
             <X className="h-5 w-5" />
           </button>
         </div>
 
-        <form onSubmit={handleInternalSave} className="flex-1 flex flex-col min-h-0 overflow-hidden bg-gray-50/20">
+        <form onSubmit={handleInternalSave} className="flex-1 flex flex-col min-h-0 overflow-hidden bg-zinc-50/30">
           {isUploading && <UploadImageLoader />}
           <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-0 overflow-hidden">
 
             {/* Column 1: Media (Left) */}
-            <div className="lg:col-span-4 h-full overflow-y-auto p-8 border-r border-gray-100 space-y-8 custom-scrollbar">
-              <div className="flex items-center gap-2 text-indigo-600 font-bold text-xs uppercase tracking-widest px-1">
-                <ImageIcon className="h-4 w-4" /> Gallery & Media
+            <div className="lg:col-span-4 h-full overflow-y-auto p-8 border-r border-zinc-100 space-y-8 custom-scrollbar bg-white">
+              <div className="flex items-center gap-2 text-brand-carbon font-bold text-[10px] uppercase tracking-[0.2em] px-1">
+                <ImageIcon className="h-4 w-4 text-brand-lime" /> Gallery & Media
               </div>
 
               {/* Main Thumbnail */}
               <div className="space-y-4">
-                <div className="aspect-square rounded-3xl bg-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden relative group transition-all hover:shadow-[0_20px_50px_rgba(79,70,229,0.1)] border border-gray-100">
+                <div className="aspect-square rounded-3xl bg-zinc-50 border border-zinc-100 overflow-hidden relative group transition-all hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)]">
                   {formData.thumbnailUrl ? (
                     <>
                       <img src={formData.thumbnailUrl} alt="Thumbnail" className="h-full w-full object-cover" />
-                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                        <label className="cursor-pointer p-3 bg-white rounded-2xl shadow-xl hover:scale-110 transition-transform text-indigo-600">
+                      <div className="absolute inset-0 bg-brand-carbon/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <label className="cursor-pointer p-3 bg-[#bef264] rounded-2xl shadow-xl hover:scale-110 transition-transform text-brand-carbon">
                           <Upload className="h-6 w-6" />
                           <input type="file" className="hidden" onChange={(e) => handleFileUpload(e, 'thumbnail')} accept="image/*" />
                         </label>
                       </div>
                     </>
                   ) : (
-                    <label className="h-full w-full flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors">
-                      <div className="p-4 bg-indigo-50 rounded-2xl mb-3">
-                        <Upload className="h-6 w-6 text-indigo-600" />
+                    <label className="h-full w-full flex flex-col items-center justify-center cursor-pointer hover:bg-zinc-100 transition-colors">
+                      <div className="p-4 bg-[#bef264]/10 rounded-2xl mb-3">
+                        <Upload className="h-6 w-6 text-brand-lime" />
                       </div>
-                      <span className="text-sm font-semibold text-gray-500">Upload Cover</span>
+                      <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Upload Cover</span>
                       <input type="file" className="hidden" onChange={(e) => handleFileUpload(e, 'thumbnail')} accept="image/*" />
                     </label>
                   )}
                 </div>
                 <div className="relative group">
-                  <LinkIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 group-focus-within:text-indigo-500 transition-colors" />
+                  <LinkIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400 group-focus-within:text-brand-lime transition-colors" />
                   <input
                     type="text"
                     placeholder="Image URL..."
                     value={formData.thumbnailUrl}
                     onChange={(e) => setFormData({ ...formData, thumbnailUrl: e.target.value })}
-                    className="w-full pl-10 pr-4 py-3.5 bg-white border border-gray-200 rounded-2xl focus:outline-none focus:border-indigo-500 focus:shadow-[0_0_0_4px_rgba(79,70,229,0.05)] transition-all text-sm shadow-sm"
+                    className="w-full pl-10 pr-4 py-3.5 bg-zinc-50 border border-zinc-200 rounded-xl focus:outline-none focus:border-brand-lime transition-all text-xs font-medium text-brand-carbon"
                   />
                 </div>
               </div>
 
               {/* Gallery Grid */}
-              <div className="bg-white p-6 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 space-y-5">
+              <div className="bg-zinc-50 p-6 rounded-3xl border border-zinc-100 space-y-5">
                 <div className="flex justify-between items-center">
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Gallery List</span>
-                  <label className="cursor-pointer p-1.5 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors group">
-                    <Plus className="h-4 w-4 text-indigo-600" />
+                  <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Gallery List</span>
+                  <label className="cursor-pointer p-1.5 bg-transparent border-2 border-brand-lime hover:border-transparent hover:bg-[#bef264] rounded-lg transition-colors group">
+                    <Plus className="h-4 w-4 text-brand-carbon group-hover:text-brand-carbon" />
                     <input type="file" multiple className="hidden" onChange={(e) => handleFileUpload(e, 'gallery')} accept="image/*" />
                   </label>
                 </div>
@@ -359,58 +359,58 @@ export function ProductModal({
             </div>
 
             {/* Column 2: General Info */}
-            <div className="lg:col-span-4 h-full overflow-y-auto p-8 border-r border-gray-100 space-y-8 custom-scrollbar">
-              <div className="flex items-center gap-2 text-indigo-600 font-bold text-xs uppercase tracking-widest px-1">
-                <Settings className="h-4 w-4" /> Global Properties
+            <div className="lg:col-span-4 h-full overflow-y-auto p-8 border-r border-zinc-100 space-y-8 custom-scrollbar">
+              <div className="flex items-center gap-2 text-brand-carbon font-bold text-[10px] uppercase tracking-[0.2em] px-1">
+                <Settings className="h-4 w-4 text-brand-lime" /> Global Properties
               </div>
 
-              <div className="bg-white p-8 rounded-[2.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 space-y-6">
+              <div className="bg-white p-8 rounded-[2rem] border border-zinc-100 space-y-6">
                 <div className="space-y-5">
                   <div className="group">
-                    <label className="block text-[10px] font-bold text-gray-400 uppercase mb-2 ml-1">Product Name</label>
+                    <label className="block text-[10px] font-bold text-zinc-400 uppercase mb-2 ml-1">Product Name</label>
                     <input
                       type="text"
                       placeholder="e.g., MacBook Pro M3"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full px-5 py-4 bg-gray-50/50 border border-transparent rounded-2xl focus:bg-white focus:border-indigo-500 focus:shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all font-medium text-gray-900"
+                      className="w-full px-5 py-4 bg-zinc-50 border border-zinc-100 rounded-2xl focus:bg-white focus:border-brand-lime transition-all font-bold text-brand-carbon"
                       required
                     />
                   </div>
 
                   <div className="group">
-                    <label className="block text-[10px] font-bold text-gray-400 uppercase mb-2 ml-1">Brand Identifier</label>
+                    <label className="block text-[10px] font-bold text-zinc-400 uppercase mb-2 ml-1">Brand Identifier</label>
                     <input
                       type="text"
                       placeholder="Apple Inc."
                       value={formData.brand}
                       onChange={(e) => setFormData({ ...formData, brand: e.target.value })}
-                      className="w-full px-5 py-4 bg-gray-50/50 border border-transparent rounded-2xl focus:bg-white focus:border-indigo-500 focus:shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all text-gray-700"
+                      className="w-full px-5 py-4 bg-zinc-50 border border-zinc-100 rounded-2xl focus:bg-white focus:border-brand-lime transition-all text-zinc-600 font-medium"
                     />
                   </div>
 
                   <div className="grid grid-cols-2 gap-5">
                     <div className="group">
-                      <label className="block text-[10px] font-bold text-gray-400 uppercase mb-2 ml-1">Listing Price</label>
+                      <label className="block text-[10px] font-bold text-zinc-400 uppercase mb-2 ml-1">Listing Price</label>
                       <div className="relative">
-                        <span className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 font-bold">₱</span>
+                        <span className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-400 font-bold">₱</span>
                         <input
                           type="number"
                           step="0.01"
                           value={formData.price}
                           onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                          className="w-full pl-10 pr-4 py-4 bg-gray-50/50 border border-transparent rounded-2xl focus:bg-white focus:border-indigo-500 focus:shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all text-gray-900 font-mono"
+                          className="w-full pl-10 pr-4 py-4 bg-zinc-50 border border-zinc-100 rounded-2xl focus:bg-white focus:border-brand-lime transition-all text-brand-carbon font-black"
                           required
                         />
                       </div>
                     </div>
                     <div className="group">
-                      <label className="block text-[10px] font-bold text-gray-400 uppercase mb-2 ml-1">Inventory Count</label>
+                      <label className="block text-[10px] font-bold text-zinc-400 uppercase mb-2 ml-1">Inventory Count</label>
                       <input
                         type="number"
                         value={formData.stock}
                         onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
-                        className="w-full px-5 py-4 bg-gray-50/50 border border-transparent rounded-2xl focus:bg-white focus:border-indigo-500 focus:shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all text-gray-900 font-mono"
+                        className="w-full px-5 py-4 bg-zinc-50 border border-zinc-100 rounded-2xl focus:bg-white focus:border-brand-lime transition-all text-brand-carbon font-black"
                         required
                       />
                     </div>
@@ -418,18 +418,18 @@ export function ProductModal({
 
                   <div className="group">
                     <div className="flex justify-between items-center mb-2 ml-1">
-                      <label className="block text-[10px] font-bold text-gray-400 uppercase">Catalogue Description</label>
+                      <label className="block text-[10px] font-bold text-zinc-400 uppercase">Catalogue Description</label>
                       <button
                         type="button"
                         onClick={handleGenerateAIDescription}
                         disabled={isGeneratingAI}
-                        className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-[10px] font-bold transition-all ${isGeneratingAI
-                          ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                          : 'bg-indigo-50 text-indigo-600 hover:bg-indigo-600 hover:text-white shadow-sm hover:shadow-indigo-200'
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all ${isGeneratingAI
+                          ? 'bg-zinc-100 text-zinc-400 cursor-not-allowed'
+                          : 'bg-[#bef264]/10 text-brand-carbon hover:bg-[#bef264] border border-brand-lime/20'
                           }`}
                       >
                         <Sparkles className={`h-3 w-3 ${isGeneratingAI ? 'animate-pulse' : ''}`} />
-                        {isGeneratingAI ? 'Generating...' : 'AI Suggest'}
+                        {isGeneratingAI ? 'Processing...' : 'AI Suggest'}
                       </button>
                     </div>
                     <div className="relative">
@@ -437,7 +437,7 @@ export function ProductModal({
                         placeholder="Compose a compelling product story..."
                         value={formData.description}
                         onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                        className={`w-full px-5 py-4 bg-gray-50/50 border border-transparent rounded-2xl focus:bg-white focus:border-indigo-500 focus:shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all min-h-[180px] resize-none leading-relaxed text-gray-600 ${isGeneratingAI ? 'opacity-50 pointer-events-none' : ''
+                        className={`w-full px-5 py-4 bg-zinc-50 border border-zinc-100 rounded-2xl focus:bg-white focus:border-brand-lime transition-all min-h-[180px] resize-none leading-relaxed text-zinc-600 text-sm ${isGeneratingAI ? 'opacity-50 pointer-events-none' : ''
                           }`}
                         rows={6}
                       />
@@ -448,21 +448,21 @@ export function ProductModal({
             </div>
 
             {/* Column 3: Technical Specs */}
-            <div className="lg:col-span-4 h-full overflow-y-auto p-8 space-y-8 custom-scrollbar">
+            <div className="lg:col-span-4 h-full overflow-y-auto p-8 space-y-8 custom-scrollbar bg-white">
               <div className="flex justify-between items-center px-1">
-                <div className="flex items-center gap-2 text-indigo-600 font-bold text-xs uppercase tracking-widest">
-                  <PlusCircle className="h-4 w-4" /> Technical Specifications
+                <div className="flex items-center gap-2 text-brand-carbon font-bold text-[10px] uppercase tracking-[0.2em]">
+                  <PlusCircle className="h-4 w-4 text-brand-lime" /> Technical Specs
                 </div>
                 <button
                   type="button"
                   onClick={addSpecRow}
-                  className="text-[10px] font-bold text-indigo-600 hover:text-white hover:bg-indigo-600 px-4 py-2 border border-indigo-100 rounded-xl transition-all shadow-sm flex items-center gap-2"
+                  className="text-[10px] font-bold text-brand-carbon bg-transparent border-2 border-brand-lime hover:border-transparent hover:bg-[#bef264] px-4 py-2 rounded-xl transition-all flex items-center gap-2 uppercase tracking-widest cursor-pointer"
                 >
                   <Plus className="h-3 w-3" /> Add Row
                 </button>
               </div>
 
-              <div className="bg-white rounded-[2.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 flex flex-col overflow-hidden">
+              <div className="bg-zinc-50 rounded-3xl border border-zinc-100 flex flex-col overflow-hidden">
                 <div className="p-8 space-y-5">
                   {formData.specs.map((spec, idx) => (
                     <div key={idx} className="flex gap-4 items-center">
@@ -472,7 +472,7 @@ export function ProductModal({
                           placeholder="Attribute"
                           value={spec.key}
                           onChange={(e) => updateSpecRow(idx, 'key', e.target.value)}
-                          className="w-full px-4 py-3.5 bg-gray-50/50 border border-transparent rounded-2xl focus:bg-white focus:border-indigo-500 focus:shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all text-sm font-bold text-gray-800 placeholder:font-normal placeholder:text-gray-300"
+                          className="w-full px-4 py-3 bg-white border border-zinc-200 rounded-xl focus:border-brand-lime transition-all text-xs font-bold text-brand-carbon uppercase tracking-wider"
                         />
                       </div>
                       <div className="flex-1">
@@ -481,13 +481,13 @@ export function ProductModal({
                           placeholder="Value"
                           value={spec.value}
                           onChange={(e) => updateSpecRow(idx, 'value', e.target.value)}
-                          className="w-full px-4 py-3.5 bg-gray-50/50 border border-transparent rounded-2xl focus:bg-white focus:border-indigo-500 focus:shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all text-sm text-gray-600 placeholder:text-gray-300"
+                          className="w-full px-4 py-3 bg-white border border-zinc-200 rounded-xl focus:border-brand-lime transition-all text-xs text-zinc-600 font-medium"
                         />
                       </div>
                       <button
                         type="button"
                         onClick={() => removeSpecRow(idx)}
-                        className="p-2.5 text-gray-200 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all"
+                        className="p-2.5 text-zinc-300 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all"
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>
@@ -500,16 +500,16 @@ export function ProductModal({
           </div>
 
           {/* Action Bar */}
-          <div className="p-8 border-t border-gray-100 flex justify-end items-center gap-4 shrink-0 bg-white z-10 shadow-[0_-1px_10px_rgba(0,0,0,0.02)]">
+          <div className="p-8 border-t border-zinc-100 flex justify-end items-center gap-4 shrink-0 bg-white z-10">
             <button
               type="button"
               onClick={onClose}
-              className="px-10 py-4 text-sm font-bold text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-2xl transition-all"
+              className="px-8 py-4 text-xs font-bold text-zinc-500 hover:text-white bg-transparent border-2 border-zinc-200 hover:border-transparent hover:bg-zinc-900 rounded-xl uppercase tracking-widest transition-all cursor-pointer"
             >
               Discard Changes
             </button>
-            <div className="w-72">
-              <SaveButton label={editingProduct ? 'Update Inventory Item' : 'Register New Product'} />
+            <div className="w-60">
+              <SaveButton label={editingProduct ? 'Update Inventory' : 'Finalize Registration'} />
             </div>
           </div>
         </form>

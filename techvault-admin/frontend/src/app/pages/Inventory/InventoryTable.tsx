@@ -58,12 +58,12 @@ export default function Inventory() {
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Inventory Management</h1>
-          <p className="text-gray-500 mt-1">Manage your product catalog, pricing, and stock levels.</p>
+          <h1 className="text-3xl font-black text-brand-carbon tracking-tighter uppercase">Inventory Management</h1>
+          <p className="text-zinc-500 mt-1 font-medium">Manage your product catalog, pricing, and stock levels.</p>
         </div>
         <button
           onClick={() => handleOpenModal()}
-          className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl transition-all shadow-lg shadow-indigo-200"
+          className="flex items-center gap-2 bg-transparent hover:bg-[#bef264] text-brand-carbon border-2 border-brand-lime hover:border-transparent px-6 py-3 rounded-xl transition-all font-bold uppercase text-xs tracking-widest cursor-pointer"
         >
           <Plus className="h-5 w-5" />
           Add Product
