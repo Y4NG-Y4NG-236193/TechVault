@@ -21,16 +21,38 @@ export default function AdminLoginPage() {
     // Audit Logging
     console.log(`SUPERADMIN Login attempt for ${email} at ${new Date().toISOString()}`)
 
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+    const { data: authData, error } = await supabase.auth.signInWithPassword({ email, password })
     
     if (error) {
       setMessage({ type: 'error', text: 'Authorization Failed: Invalid Credentials' })
       setLoading(false)
     } else {
-      // In a real app, we'd check if 2FA is enabled and move to step 2
-      // For now, let's simulate the 2FA requirement
-      setStep(2)
-      setLoading(false)
+      // Step 2: Verify SuperAdmin status in the database
+      try {
+        const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'
+        const response = await fetch(`${apiBase}/api/auth/verify-access`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        })
+
+        const data = await response.json()
+
+        if (!response.ok || !data.authorized) {
+          await supabase.auth.signOut()
+          setMessage({ type: 'error', text: 'Restricted Access: Your identity is not in the SuperAdmin registry.' })
+          setLoading(false)
+        } else {
+          // In a real app, we'd check if 2FA is enabled and move to step 2
+          // For now, let's simulate the 2FA requirement
+          setStep(2)
+          setLoading(false)
+        }
+      } catch (apiError) {
+        await supabase.auth.signOut()
+        setMessage({ type: 'error', text: 'Security Service Offline' })
+        setLoading(false)
+      }
     }
   }
 

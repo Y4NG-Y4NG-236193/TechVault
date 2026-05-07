@@ -32,15 +32,45 @@ export default function LoginPage() {
     // Audit Logging: Log attempt (in a real app, this would be a backend call)
     console.log(`Login attempt for ${email} at ${new Date().toISOString()}`)
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
-
+    const { data: authData, error } = await supabase.auth.signInWithPassword({ email, password })
+    
     if (error) {
-      // Security: Generic error message to prevent account enumeration if needed,
-      // but Supabase provides specific ones. We can wrap them.
       setMessage({ type: 'error', text: error.message })
-    } else {
-      window.location.href = '/'
+      setLoading(false)
+      return
     }
+
+    // Step 2: Verify if the user is in the 'superadmins' table
+    try {
+      const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'
+      const response = await fetch(`${apiBase}/api/auth/verify-access`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok || !data.authorized) {
+        // If not authorized, sign them out immediately
+        await supabase.auth.signOut()
+        setMessage({ 
+          type: 'error', 
+          text: data.message || 'Access Denied: You are not authorized to access the Admin Panel.' 
+        })
+      } else {
+        // Authorized!
+        window.location.href = '/'
+      }
+    } catch (apiError) {
+      console.error('API Error:', apiError)
+      // Fallback or error handling
+      setMessage({ type: 'error', text: 'Authorization service unavailable. Please try again later.' })
+      await supabase.auth.signOut()
+    }
+
     setLoading(false)
   }
 

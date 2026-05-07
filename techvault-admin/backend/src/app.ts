@@ -6,6 +6,7 @@ import searchRouter from './routes/search'
 import productRouter from './routes/product.routes'
 import customerRouter from './routes/customer.routes'
 import aiRouter from './routes/ai.routes'
+import authRouter from './routes/auth.routes'
 
 const app = express()
 
@@ -35,6 +36,7 @@ app.use('/api/ai', aiRouter)
 app.use(searchRouter)
 app.use(productRouter)
 app.use(customerRouter)
+app.use(authRouter)
 
 // Error Handling (Must be last)
 app.use(errorHandler)
