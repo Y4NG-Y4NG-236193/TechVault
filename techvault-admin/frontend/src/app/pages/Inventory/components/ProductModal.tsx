@@ -509,7 +509,7 @@ export function ProductModal({
               Discard Changes
             </button>
             <div className="w-60">
-              <SaveButton label={editingProduct ? 'Update Inventory' : 'Finalize Registration'} />
+              <SaveButton label={editingProduct ? 'Update Inventory' : 'Add Product'} />
             </div>
           </div>
         </form>
